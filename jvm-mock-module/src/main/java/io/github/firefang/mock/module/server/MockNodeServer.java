@@ -34,10 +34,9 @@ public class MockNodeServer {
 
     private void initServer() {
         httpServer = new Server(PORT);
-        QueuedThreadPool qtp = new QueuedThreadPool();
+        QueuedThreadPool qtp = (QueuedThreadPool) httpServer.getThreadPool();
         qtp.setDaemon(true);
         qtp.setName("mock-node-pool");
-        httpServer.setThreadPool(qtp);
     }
 
     private void initContextHandler(MockController controller) {
