@@ -135,10 +135,11 @@ public class MockNodeServlet extends HttpServlet {
                 return;
             }
             ResponseDTO dto = new ResponseDTO();
+            dto.setCode(ResponseDTO.SUCCESS);
             if (controller.disableMock(id)) {
-                dto.setCode(ResponseDTO.SUCCESS);
+                dto.setData(true);
             } else {
-                dto.setCode(ResponseDTO.SOURCE + ResponseDTO.BUS_ERR);
+                dto.setData(false);
             }
             writeResponse(resp, dto);
         }

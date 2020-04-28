@@ -58,6 +58,7 @@ public abstract class BaseReqhandler {
 
     protected void writeResponse(HttpServletResponse resp, int status, ResponseDTO content) throws IOException {
         resp.setStatus(status);
+        resp.setContentType("application/json");
         if (content == null) {
             return;
         }
