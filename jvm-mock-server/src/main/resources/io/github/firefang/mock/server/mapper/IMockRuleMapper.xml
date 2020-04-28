@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.firefang.mock.server.mapper.IMockRuleMapper">
+    <sql id="table">t_mock_rule</sql>
+
+    <sql id="cols">`id`, `node_id`, `class_pattern`, `method_pattern`, `script`, `watcher_id`</sql>
+
+    <resultMap type="MockRuleDO" id="resultMap">
+        <id property="id" column="id" />
+        <result property="nodeId" column="node_id" />
+        <result property="classPattern" column="class_pattern" />
+        <result property="methodPattern" column="method_pattern" />
+        <result property="script" column="script" />
+        <result property="watcherId" column="watcher_id" />
+    </resultMap>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO <include refid="table" /> ( `node_id`, `class_pattern`, `method_pattern`, `script` )
+        VALUES ( #{nodeId}, #{classPattern}, #{methodPattern}, #{script} )
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM <include refid="table" /> WHERE `id` = #{id}
+    </delete>
+
+    <update id="updateById">
+        UPDATE <include refid="table" />
+            SET `class_pattern` = #{classPattern},
+            `method_pattern` = #{methodPattern},
+            `script` = #{script}
+        WHERE `id` = #{id};
+    </update>
+
+    <update id="updateWatcherIdById">
+        UPDATE <include refid="table" /> SET `watcher_id` = #{watcherId}
+        WHERE `id` = #{id};
+    </update>
+
+    <select id="find" resultMap="resultMap">
+        SELECT <include refid="cols" /> FROM <include refid="table" />
+        <where>
+            <if test="nodeId != null">`node_id` = #{nodeId}</if>
+        </where>
+    </select>
+
+    <select id="findById" resultMap="resultMap">
+        SELECT <include refid="cols" /> FROM <include refid="table" />
+        WHERE `id` = #{id}
+    </select>
+
+    <select id="countEnabled" resultType="java.lang.Long">
+        SELECT COUNT(0) FROM <include refid="table" />
+        WHERE `node_id` = #{nodeId} AND `watcher_id` IS NOT NULL
+    </select>
+
+    <delete id="deleteByNodeId">
+        DELETE FROM <include refid="table" /> WHERE `node_id` = #{nodeId}
+    </delete>
+</mapper>

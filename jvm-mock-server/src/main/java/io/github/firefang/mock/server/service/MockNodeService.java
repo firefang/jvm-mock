@@ -13,10 +13,12 @@ import io.github.firefang.power.exception.BusinessException;
 @Service
 public class MockNodeService {
     private IMockNodeMapper mockNodeMapper;
+    private MockRuleService mockRuleSrv;
     private NodeClient client;
 
-    public MockNodeService(IMockNodeMapper mockNodeMapper, NodeClient client) {
+    public MockNodeService(IMockNodeMapper mockNodeMapper, MockRuleService mockRuleSrv, NodeClient client) {
         this.mockNodeMapper = mockNodeMapper;
+        this.mockRuleSrv = mockRuleSrv;
         this.client = client;
     }
 
@@ -34,6 +36,10 @@ public class MockNodeService {
 
     public void delete(Integer id) {
         checkExist(id);
+        if (!mockRuleSrv.isAllDisabled(id)) {
+            throw new BusinessException("节点下存在启用的规则，请全部停用后删除节点");
+        }
+        mockRuleSrv.deleteByNodeId(id);
         mockNodeMapper.deleteById(id);
     }
 
@@ -59,7 +65,7 @@ public class MockNodeService {
     private MockNodeDO checkExist(Integer id) {
         MockNodeDO entity = mockNodeMapper.findById(id);
         if (entity == null) {
-            throw new BusinessException("节点不已存在");
+            throw new BusinessException("节点不存在");
         }
         return entity;
     }

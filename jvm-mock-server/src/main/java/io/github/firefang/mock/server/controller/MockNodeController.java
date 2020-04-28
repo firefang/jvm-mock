@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.github.firefang.mock.server.entity.domain.MockNodeDO;
 import io.github.firefang.mock.server.entity.form.MockNodeForm;
-import io.github.firefang.mock.server.entity.form.MockNodeForm.ICreateGroup;
 import io.github.firefang.mock.server.service.MockNodeService;
+import io.github.firefang.power.web.group.CreateGroup;
 
 @RestController
 @RequestMapping("/nodes")
@@ -27,7 +27,7 @@ public class MockNodeController {
     }
 
     @PostMapping
-    public Integer add(@Validated(value = ICreateGroup.class) @RequestBody MockNodeForm form) {
+    public Integer add(@Validated(value = CreateGroup.class) @RequestBody MockNodeForm form) {
         return mockNodeSrv.add(form);
     }
 

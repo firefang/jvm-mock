@@ -11,8 +11,8 @@ import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import io.github.firefang.mock.server.entity.domain.MockRuleDO;
 import io.github.firefang.mock.server.entity.dto.ResponseDTO;
+import io.github.firefang.mock.server.entity.form.MockRuleForm;
 import io.github.firefang.power.exception.BusinessException;
 
 @Component
@@ -45,7 +45,7 @@ public class NodeClient {
         return false;
     }
 
-    public Integer enable(String ip, MockRuleDO rule) {
+    public Integer enable(String ip, MockRuleForm rule) {
         String url = getUrl(ip, ENABLE_PATH);
         ResponseEntity<ResponseDTO> resp;
         try {

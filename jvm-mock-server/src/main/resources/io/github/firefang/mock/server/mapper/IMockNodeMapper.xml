@@ -6,10 +6,10 @@
 
     <sql id="cols">`id`, inet_ntoa(`node_ip`) as ip, `is_online`, `remark`</sql>
 
-    <resultMap type="MockNodeDo" id="resultMap">
+    <resultMap type="MockNodeDO" id="resultMap">
         <id property="id" column="id" />
         <result property="ip" column="ip" />
-        <result property="is_online" column="online" />
+        <result property="online" column="is_online" />
         <result property="remark" column="remark" />
     </resultMap>
 
@@ -43,7 +43,7 @@
         WHERE `id` = #{id}
     </select>
 
-    <select id="find" resultMap="resultMap">
+    <select id="findByIp" resultMap="resultMap">
         SELECT <include refid="cols" /> FROM <include refid="table" />
         WHERE `node_ip` = inet_aton(#{ip})
     </select>
