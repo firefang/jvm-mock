@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.firefang.mock.server.mapper.IMockNodeMapper">
+    <sql id="table">t_mock_node</sql>
+
+    <sql id="cols">`id`, inet_ntoa(`node_ip`) as ip, `is_online`, `remark`</sql>
+
+    <resultMap type="MockNodeDo" id="resultMap">
+        <id property="id" column="id" />
+        <result property="ip" column="ip" />
+        <result property="is_online" column="online" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO <include refid="table" /> ( `node_ip`, `is_online`, `remark` )
+        VALUES ( inet_aton(#{ip}), #{online}, #{remark} )
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM <include refid="table" /> WHERE `id` = #{id}
+    </delete>
+
+    <update id="updateById">
+        UPDATE <include refid="table" />
+            SET `remark` = #{remark},
+            `is_online` = #{online}
+        WHERE `id` = #{id};
+    </update>
+
+    <select id="find" resultMap="resultMap">
+        SELECT <include refid="cols" /> FROM <include refid="table" />
+        <where>
+            <if test="id != null">`id` = #{id}</if>
+            <if test="ip != null">AND `node_ip` = inet_aton(#{ip})</if>
+            <if test="online != null">AND `is_online` = #{online}</if>
+        </where>
+    </select>
+
+    <select id="findById" resultMap="resultMap">
+        SELECT <include refid="cols" /> FROM <include refid="table" />
+        WHERE `id` = #{id}
+    </select>
+
+    <select id="find" resultMap="resultMap">
+        SELECT <include refid="cols" /> FROM <include refid="table" />
+        WHERE `node_ip` = inet_aton(#{ip})
+    </select>
+</mapper>
